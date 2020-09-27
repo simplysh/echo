@@ -1,4 +1,5 @@
-import { div, span, button, canvas, input, svg, circle } from '../echo.js';
+const { div, span, button, canvas, input, svg, circle } = echo;
+const { expect } = chai;
 
 suite('dom', function() {
   test('can create empty', function () {

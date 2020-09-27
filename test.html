@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>flatcat Test Suite</title>
+  <title>echo test suite</title>
   <link rel="stylesheet" href="vendor/mocha.css">
 </head>
 <body>
@@ -12,13 +12,17 @@
   <script src="vendor/mocha.js"></script>
   <script src="vendor/chai.js"></script>
 
-  <script type="module" src="test/echo.spec.js"></script>
+  <script src="echo.js"></script>
 
-  <script>
+  <script class="mocha-init">
     mocha.setup('tdd');
-    const { expect } = chai;
+    mocha.checkLeaks();
   </script>
 
-  <script defer src="test/run.js"></script>
+  <script src="test/echo.spec.js"></script>
+
+  <script class="mocha-exec">
+    mocha.run();
+  </script>
 </body>
 </html>
