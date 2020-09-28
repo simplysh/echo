@@ -1,7 +1,7 @@
 const { div, span, button, canvas, input, svg, circle } = echo;
 const { expect } = chai;
 
-suite('dom', function() {
+suite('echo', function() {
   test('can create empty', function () {
     const result = div();
 

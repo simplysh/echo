@@ -143,11 +143,11 @@
     path: el.bind(void 0, 'path'),
   }
 
-  if (typeof window === 'object') {
+  if (typeof window !== 'undefined') {
     window.echo = echo;
   }
 
-  if (typeof module === 'function') {
+  if (typeof module !== 'undefined') {
     module.exports = echo;
   }
 })();
