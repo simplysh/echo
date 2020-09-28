@@ -76,10 +76,24 @@
     for (const [attr, value] of Object.entries(attributes)) {
       if (value === undefined) { continue; }
 
-      if (attr === 'class' && typeof value === 'object') {
-        for (const [name, toggle] of Object.entries(value)) {
-          element.classList.toggle(name, toggle);
+      if (attr === 'className') {
+        if (typeof value === 'object') {
+          // use the string representation if available
+          if (value.hasOwnProperty('toString')) {
+            element.setAttribute('class', String(value));
+
+            continue;
+          }
+
+          // otherwise treat as class visibility
+          for (const [name, toggle] of Object.entries(value)) {
+            element.classList.toggle(name, toggle);
+          }
+
+          continue;
         }
+
+        element.setAttribute('class', String(value));
 
         continue;
       }

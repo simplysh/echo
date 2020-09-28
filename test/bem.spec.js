@@ -8,6 +8,7 @@ suite('bem', function() {
     expect(result).to.have.property('modifier');
     expect(result).to.have.property('pop');
     expect(result).to.have.property('top');
+    expect(result).to.have.property('toString');
   });
 
   test('empty by default', function () {
@@ -23,11 +24,9 @@ suite('bem', function() {
   });
 
   test('can add block', function () {
-    const instance = bem();
-    const result = instance.block('foo');
+    const result = bem().block('foo');
 
-    expect(result).to.equal('foo');
-    expect(instance.get()).to.equal('foo');
+    expect(result.get()).to.equal('foo');
   });
 
   test('cannot pop block', function () {
@@ -37,66 +36,50 @@ suite('bem', function() {
   });
 
   test('can add element', function () {
-    const instance = bem('foo');
+    const result = bem('foo').element('bar');
 
-    const result = instance.element('bar');
-
-    expect(result).to.equal('foo__bar');
-    expect(instance.get()).to.equal('foo__bar');
+    expect(result.get()).to.equal('foo__bar');
   });
 
   test('can pop element', function () {
-    const result = bem('foo');
-
-    result.element('bar')
-    result.pop();
+    const result = bem('foo').element('bar').pop();
 
     expect(result.get()).to.equal('foo');
   });
 
   test('can add modifier', function () {
-    const instance = bem('foo');
+    const result = bem('foo').modifier('baz');
 
-    const result = instance.modifier('baz');
-
-    expect(result).to.equal('foo--baz');
-    expect(instance.get()).to.equal('foo--baz');
+    expect(result.get()).to.equal('foo--baz');
   });
 
   test('can pop modifier', function () {
-    const result = bem('foo');
-
-    result.modifier('baz')
-    result.pop();
+    const result = bem('foo').modifier('baz').pop();
 
     expect(result.get()).to.equal('foo');
   });
 
   test('can add element, modifier', function () {
-    const result = bem('foo');
-
-    result.element('bar');
-    result.modifier('baz');
+    const result = bem('foo').element('bar').modifier('baz');
 
     expect(result.get()).to.equal('foo__bar--baz');
   });
 
   test('can pop element, modifier', function () {
-    const result = bem('foo');
-
-    result.element('bar');
-    result.modifier('baz');
-    result.pop().pop();
+    const result = bem('foo')
+      .element('bar')
+      .modifier('baz')
+      .pop()
+      .pop();
 
     expect(result.get()).to.equal('foo');
   });
 
   test('top removes element, modifier', function () {
-    const result = bem('foo');
-
-    result.element('bar');
-    result.modifier('baz');
-    result.top();
+    const result = bem('foo')
+      .element('bar')
+      .modifier('baz')
+      .top();
 
     expect(result.get()).to.equal('foo');
   });

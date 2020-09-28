@@ -15,7 +15,7 @@ suite('echo', function() {
   });
 
   test('can be nested', function () {
-    const result = div({ class: 'foo' }, [div({ class: 'bar' })]);
+    const result = div({ className: 'foo' }, [div({ className: 'bar' })]);
 
     expect(result.outerHTML).to.equal('<div class="foo"><div class="bar"></div></div>');
   });
@@ -70,9 +70,15 @@ test('undefined attributes are ignored', function () { const result = span({ id:
   });
 
   test('accepts object syntax for classes', function () {
-    const result = span({ class: { present: true, 'not-present': false } });
+    const result = span({ className: { present: true, 'not-present': false } });
 
     expect(result.outerHTML).to.equal('<span class="present"></span>');
+  });
+
+  test('will convert classes to string', function () {
+    const result = span({ className: { toString() { return 'converted' } } });
+
+    expect(result.outerHTML).to.equal('<span class="converted"></span>');
   });
 
   test('accepts object syntax for style', function () {
