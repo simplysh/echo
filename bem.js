@@ -38,7 +38,7 @@
   }
 
   if (typeof module !== 'undefined') {
-    module.exports = echo;
+    module.exports = bem;
   }
 })();
 

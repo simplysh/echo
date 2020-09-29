@@ -52,7 +52,7 @@
         if (
           typeof singleArgument === 'string'
           || typeof singleArgument === 'number'
-          || singleArgument instanceof Element
+          || singleArgument instanceof Node
           || Array.isArray(singleArgument)
         ) {
           children = [].concat(singleArgument);
