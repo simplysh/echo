@@ -72,6 +72,7 @@
       // treat body as a fragment
       if (this.type === 'body') {
         const fragment = new Node('fragment');
+
         fragment.children = this.children;
 
         return fragment.render(options);
@@ -89,10 +90,6 @@
         level: level + 1,
         leaf: !expanded,
       })).join(newline);
-
-      if (this.type === 'fragment') {
-        return children;
-      }
 
       if (this.type === 'text') {
         return this.data;
