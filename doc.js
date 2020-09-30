@@ -2,7 +2,19 @@
   const singles = ['input'];
 
   class Node {
-    constructor(type, data) {
+    set className(name) {
+      this.setAttribute('class', name);
+    }
+
+    set innerHTML(data) {
+      this.data = data;
+    }
+
+    get outerHTML() {
+      return this.render();
+    }
+
+    constructor(type, data = '') {
       this.type = type;
       this.attributes = {};
       this.style = {};
@@ -30,16 +42,17 @@
     }
 
     renderStyle() {
-      // todo: convert key names to hyphen case
       let result = ' style="';
       let first = true;
 
       for (const [attr, value] of Object.entries(this.style)) {
+        let key = attr.replace(/[A-Z]/g, upper => `-${upper.toLowerCase()}`);
+
         if (!first) {
           result = `${result} `;
         }
 
-        result = `${result}${attr}: ${value};`;
+        result = `${result}${key}: ${value};`;
         first = false;
       }
 
@@ -48,10 +61,36 @@
       return result !== ' style=""' ? result : '';
     }
 
-    render(skip, indent = '') {
-      const children = this.children.map(child => child.render(false, indent)).join(`\n${indent}`);
+    render(options = {}) {
+      // merge fragments into current call
+      if (this.children.length === 1 && this.children[0].type === 'fragment') {
+        this.children = this.children[0].children;
 
-      if (skip || this.type === 'fragment') {
+        return this.render(options);
+      }
+
+      // treat body as a fragment
+      if (this.type === 'body') {
+        const fragment = new Node('fragment');
+        fragment.children = this.children;
+
+        return fragment.render(options);
+      }
+
+      const { level = 0, pretty = false, spaces = 2, leaf = false } = options;
+
+      const expanded = this.children.length > 1;
+      const padStart = pretty && !leaf ? new Array(level * spaces).fill(' ').join('') : '';
+      const padEnd = pretty && expanded ? new Array(level * spaces).fill(' ').join('') : '';
+      const newline = pretty && expanded ? '\n' : '';
+
+      const children = this.children.map(child => child.render({
+        ...options,
+        level: level + 1,
+        leaf: !expanded,
+      })).join(newline);
+
+      if (this.type === 'fragment') {
         return children;
       }
 
@@ -59,9 +98,9 @@
         return this.data;
       }
 
-      const close = !this.noClose ? `</${this.type}>` : ''
+      const close = !this.noClose ? `${padEnd}</${this.type}>` : ''
 
-      return `<${this.type}${this.renderAttributes()}${this.renderStyle()}>${children}${close}`;
+      return `${padStart}<${this.type}${this.renderAttributes()}${this.renderStyle()}>${newline}${children}${this.data}${newline}${close}`;
     }
   }
 
