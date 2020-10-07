@@ -61,7 +61,7 @@ suite('doc', function() {
     expect(own.outerHTML).to.equal(native.outerHTML);
   });
 
-  test.only('can pretty print', function () {
+  test('can pretty print', function () {
     const div = doc.createElement('div');
     const single = doc.createElement('div');
     const multi = doc.createElement('div');
@@ -89,5 +89,42 @@ suite('doc', function() {
     <span>second</span>
   </div>
 </div>`);
+  });
+
+  test('pretty print expands for more children at different depth', function () {
+    const main = doc.createElement('div');
+    main.className = 'main';
+
+    const depth = 5;
+    let current = main;
+    for (let i = 0; i < depth; i++) {
+      const div = doc.createElement('div');
+      current.appendChild(div);
+      current = div;
+    }
+
+    for (let i = 0; i < depth; i++) {
+      const span = doc.createElement('span');
+      span.innerHTML = `Item #${i + 1}`;
+      current.appendChild(span);
+    }
+
+    expect(main.render({ pretty: true })).to.equal(`<div class="main">
+  <div>
+    <div>
+      <div>
+        <div>
+          <div>
+            <span>Item #1</span>
+            <span>Item #2</span>
+            <span>Item #3</span>
+            <span>Item #4</span>
+            <span>Item #5</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>`)
   });
 });

@@ -79,7 +79,21 @@
 
       const { level = 0, pretty = false, spaces = 2, leaf = false } = options;
 
-      const expanded = this.children.length > 1;
+      let expanded = this.children.length > 1;
+      // go through the children until we either find multiple or a leaf
+      if (this.children.length === 1) {
+        let visitor = this;
+
+        while (visitor.children.length === 1) {
+          visitor = visitor.children[0];
+
+          if (visitor.children.length > 1) {
+            expanded = true;
+            break;
+          }
+        }
+      }
+
       const padStart = pretty && !leaf ? new Array(level * spaces).fill(' ').join('') : '';
       const padEnd = pretty && expanded ? new Array(level * spaces).fill(' ').join('') : '';
       const newline = pretty && expanded ? '\n' : '';
